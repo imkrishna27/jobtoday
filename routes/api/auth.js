@@ -5,12 +5,15 @@ const User = require('../../models/users');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
+// const passport = require('passport');
 const { check, validationResult } = require('express-validator');
+const { route } = require('./users');
 
 // @route GET api/auth
 // @desc TEST route
 // @access Public
+
+
 
 router.get('/', auth, async (req, res) => {
   try {

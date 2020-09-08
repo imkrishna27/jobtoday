@@ -1,41 +1,28 @@
 const express = require('express');
 const connectDB = require('./config/db');
+const cookieSession = require('cookie-session');
+const bodyParser = require('body-parser');
 const keys = require('./config/dev');
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth2');
+require('./models/users');
+require('./services/passport');
 
 const app = express();
 
 connectDB();
 
-// google Oauth
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: keys.googleClientID,
-      clientSecret: keys.googleClientSecret,
-      callbackURL: '/auth/google/callback',
-    },
-    (accessToken, refreshToken, profile, done) => {
-      console.log('Google access Token: ', accessToken);
-      console.log('refresh token: ', refreshToken);
-      console.log('profile: ', profile); //comment or remove console.log; only for test
-    }
-  )
-);
+//cookies for gOauth
 
-// Route Hnadler for google Oauth
-
-app.get(
-  '/auth/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email'],
+app.use(
+  cookieSession({
+    maxAge: 30*24*60*60*1000,         //setting cookie expire time for 30 days
+    keys: [keys.cookieKey]
   })
 );
 
-app.get('/auth/google/callback', passport.authenticate('google'));
-
-//@init middleware
+app.use(passport.initialize());
+app.use(passport.session());
+//@init middlewar
 app.use(
   express.json({
     extended: false,
@@ -43,10 +30,15 @@ app.use(
 );
 
 // @define routes
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/profile', require('./routes/api/profile'));
+
+// require('./routes/api/auth')(app);
+require('./routes/api/authRoutes')(app);
 
 const PORT = process.env.PORT || 5000;
 
