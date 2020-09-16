@@ -13,8 +13,6 @@ const { route } = require('./users');
 // @desc TEST route
 // @access Public
 
-
-
 router.get('/', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');

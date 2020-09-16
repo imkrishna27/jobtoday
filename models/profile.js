@@ -40,6 +40,10 @@ const profileSchema = new schema({
         type: String,
         required: true,
       },
+      joiningyear: {
+        type: String,
+        required: true,
+      },
       passingyear: {
         type: String,
         required: true,
