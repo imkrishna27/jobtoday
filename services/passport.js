@@ -21,8 +21,8 @@ passport.use(new GoogleStrategy({
 	  callbackURL: '/auth/google/callback',
 	  proxy:true
   },
-  async (accesToken, refresh, profile,done) => {
-    // console.log('profile',profile);
+  async (accessToken, refresh, profile,done) => {
+    // console.log('Token: ',accessToken);
     const existingUser = await User.findOne({ email:profile.emails[0].value })
       if(existingUser){
         return done(null,existingUser);
@@ -30,7 +30,7 @@ passport.use(new GoogleStrategy({
         const user = await new User({ name:profile.displayName,
                                       email:profile.emails[0].value,
                                       avatar:profile.photos[0].value,
-                                      password:null }).save();
+                                      password:profile.id }).save();
         done(null,user);
 
     	}

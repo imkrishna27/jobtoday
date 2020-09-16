@@ -11,6 +11,8 @@ const app = express();
 
 connectDB();
 
+
+
 //cookies for gOauth
 
 app.use(
@@ -30,8 +32,10 @@ app.use(
 );
 
 // @define routes
-app.use(passport.initialize());
-app.use(passport.session());
+
+app.use(bodyParser.json());
+
+
 
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
