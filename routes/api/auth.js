@@ -72,7 +72,7 @@ router.post(
   }
 );
 
-router.post('/forgetpassword',
+router.put('/forgetpassword',
   [
     check('email')
       .not()
@@ -110,7 +110,7 @@ router.post('/forgetpassword',
             subject: 'Password Reset Link',
             html: `
                     <h1>Please use the following link to reset your password</h1>
-                    <p>${keys.client_url}/users/password/reset/${emailToken}</p>
+                    <p>${keys.client_url}/api/auth/reset/:${emailToken}</p>
                     <hr />
                     <P> this email contain sensetive info</p>
                     <p>${keys.client_url}</p>
@@ -120,7 +120,7 @@ router.post('/forgetpassword',
           return isemail.updateOne({
             resetPasswordLink: emailToken
           },
-          (err, sucess) => {
+          (err, success) => {
             if(err) {
               console.log('RESET PASSWORD LINK ERROR', err);
               return res.status(400).json({
@@ -153,5 +153,9 @@ router.post('/forgetpassword',
   }
 );
 
+// route.get('/reset/:emailToken',
+//   [
+    
+//   ])
 
 module.exports = router;
