@@ -11,14 +11,12 @@ const app = express();
 
 connectDB();
 
-
-
 //cookies for gOauth
 
 app.use(
   cookieSession({
-    maxAge: 30*24*60*60*1000,         //setting cookie expire time for 30 days
-    keys: [keys.cookieKey]
+    maxAge: 30 * 24 * 60 * 60 * 1000, //setting cookie expire time for 30 days
+    keys: [keys.cookieKey],
   })
 );
 
@@ -35,11 +33,10 @@ app.use(
 
 app.use(bodyParser.json());
 
-
-
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/profile', require('./routes/api/profile'));
+app.use('/api/intern', require('./routes/api/interns'));
 
 // require('./routes/api/auth')(app);
 require('./routes/api/authRoutes')(app);
